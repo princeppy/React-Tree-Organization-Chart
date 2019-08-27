@@ -48,7 +48,8 @@ export default class TreeOrgChart extends React.Component<ITreeOrgChartProps, IT
   /*
   // Load Organization Chart
   */
-  public async loadOrgchart() {
+
+  public loadOrgchart = async () => {
     this.setState({ treeData: [], isLoading: true });
     const currentUser = `i:0#.f|membership|${this.props.context.pageContext.user.loginName}`;
     const currentUserProperties = await this.SPService.getUserProperties(currentUser);
@@ -85,6 +86,7 @@ export default class TreeOrgChart extends React.Component<ITreeOrgChartProps, IT
     }
     return treeManagers;
   }
+
   /*
   // Get user from Top Manager
   */
@@ -149,22 +151,22 @@ export default class TreeOrgChart extends React.Component<ITreeOrgChartProps, IT
     let treeChildren: ITreeChildren[] = [];
     let peer: IPersonaSharedProps = {};
     let imageInitials: string[];
-    let hasManager:boolean = false;
-    let  managerCard: any;
+    let hasManager: boolean = false;
+    let managerCard: any;
     // Get My Manager
     const myManager = await this.SPService.getUserProfileProperty(currentUserProperties.AccountName, 'Manager');
     // Get My Manager Properties
-    if (myManager){
+    if (myManager) {
       const managerProperties = await this.SPService.getUserProperties(myManager);
-    imageInitials = managerProperties.DisplayName.split(' ');
-    // PersonaCard Props
-    manager.imageUrl = `/_layouts/15/userphoto.aspx?size=L&username=${managerProperties.Email}`;
-    manager.imageInitials = `${imageInitials[0].substring(0, 1).toUpperCase()}${imageInitials[1].substring(0, 1).toUpperCase()}`;
-    manager.text = managerProperties.DisplayName;
-    manager.tertiaryText = managerProperties.Email;
-    manager.secondaryText = managerProperties.Title;
-    // PersonaCard Component
-     managerCard = <Persona {...manager} hidePersonaDetails={false} size={PersonaSize.size40} />;
+      imageInitials = managerProperties.DisplayName.split(' ');
+      // PersonaCard Props
+      manager.imageUrl = `/_layouts/15/userphoto.aspx?size=L&username=${managerProperties.Email}`;
+      manager.imageInitials = `${imageInitials[0].substring(0, 1).toUpperCase()}${imageInitials[1].substring(0, 1).toUpperCase()}`;
+      manager.text = managerProperties.DisplayName;
+      manager.tertiaryText = managerProperties.Email;
+      manager.secondaryText = managerProperties.Title;
+      // PersonaCard Component
+      managerCard = <Persona {...manager} hidePersonaDetails={false} size={PersonaSize.size40} />;
       hasManager = true;
     }
 
@@ -181,9 +183,9 @@ export default class TreeOrgChart extends React.Component<ITreeOrgChartProps, IT
     if (hasManager) {
       treeChildren.push({ title: (meCard), expanded: true, children: usersDirectReports })
 
-    }else{
-        treeChildren = usersDirectReports;
-        managerCard = meCard;
+    } else {
+      treeChildren = usersDirectReports;
+      managerCard = meCard;
     }
 
     // Get MyPeers
